@@ -1,8 +1,15 @@
 export interface User {
-  id: number;
   email: string;
-  username: string;
+  companyName: string | null;
+  name: string | null;
+  role: string;
   createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProfileUpdateRequest {
+  companyName?: string;
+  name?: string;
 }
 
 export interface LoginRequest {
@@ -13,15 +20,9 @@ export interface LoginRequest {
 export interface SignupRequest {
   email: string;
   password: string;
-  username: string;
-}
-
-export interface ProfileUpdateRequest {
-  username?: string;
-  password?: string;
+  passwordConfirm: string;
 }
 
 export interface AuthResponse {
   accessToken: string;
-  user: User;
 }

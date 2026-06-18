@@ -27,16 +27,12 @@ export default function ProductDetailPage() {
 
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-sm text-gray-400">{product.category}</p>
+          <p className="text-sm text-gray-400">{product.category?.name}</p>
           <h1 className="text-2xl font-bold text-gray-900">{product.name}</h1>
           <p className="mt-1 text-xl font-bold text-orange-500">{formatPrice(product.price)}</p>
         </div>
         <Badge count={product.purchaseCount} />
       </div>
-
-      {product.description && (
-        <p className="mt-4 text-gray-600">{product.description}</p>
-      )}
 
       <div className="mt-6 flex gap-3">
         <Button variant="secondary" onClick={() => setIsEditOpen(true)}>수정</Button>

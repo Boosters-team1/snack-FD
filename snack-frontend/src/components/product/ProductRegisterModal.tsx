@@ -2,23 +2,28 @@ import { useState } from 'react';
 import Modal from '../common/Modal';
 import Input from '../common/Input';
 import Button from '../common/Button';
-import { CATEGORIES } from '../../constants/categories';
 import { useCreateProduct } from '../../hooks/useProducts';
+import { useCategories, flattenCategories } from '../../hooks/useCategories';
 
 interface ProductRegisterModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
+const EMPTY_FORM = { name: '', price: '', categoryId: 0, productLink: '', image: undefined as File | undefined };
+
 export default function ProductRegisterModal({ isOpen, onClose }: ProductRegisterModalProps) {
-  const [form, setForm] = useState({ name: '', price: '', category: 'snack', description: '', imageUrl: '' });
+  const [form, setForm] = useState(EMPTY_FORM);
   const { mutate, isPending } = useCreateProduct();
+  const { data: categoryTree = [] } = useCategories();
+  const flatCategories = flattenCategories(categoryTree);
+  const defaultCategoryId = form.categoryId || flatCategories[0]?.id || 0;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     mutate(
-      { ...form, price: Number(form.price) },
-      { onSuccess: () => { onClose(); setForm({ name: '', price: '', category: 'snack', description: '', imageUrl: '' }); } }
+      { name: form.name, price: Number(form.price), categoryId: defaultCategoryId, productLink: form.productLink || undefined, image: form.image },
+      { onSuccess: () => { onClose(); setForm(EMPTY_FORM); } }
     );
   };
 
@@ -30,17 +35,25 @@ export default function ProductRegisterModal({ isOpen, onClose }: ProductRegiste
         <div className="flex flex-col gap-1">
           <label className="text-sm font-medium text-gray-700">카테고리</label>
           <select
-            value={form.category}
-            onChange={(e) => setForm({ ...form, category: e.target.value })}
+            value={defaultCategoryId}
+            onChange={(e) => setForm({ ...form, categoryId: Number(e.target.value) })}
             className="rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-orange-400"
           >
-            {CATEGORIES.filter((c) => c.value !== 'all').map((c) => (
-              <option key={c.value} value={c.value}>{c.label}</option>
+            {flatCategories.map((c) => (
+              <option key={c.id} value={c.id}>{c.depth > 0 ? `ㄴ ${c.label}` : c.label}</option>
             ))}
           </select>
         </div>
-        <Input label="설명" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
-        <Input label="이미지 URL" value={form.imageUrl} onChange={(e) => setForm({ ...form, imageUrl: e.target.value })} />
+        <div className="flex flex-col gap-1">
+          <label className="text-sm font-medium text-gray-700">이미지</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setForm({ ...form, image: e.target.files?.[0] })}
+            className="rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-orange-400"
+          />
+        </div>
+        <Input label="상품 링크 (선택)" value={form.productLink} onChange={(e) => setForm({ ...form, productLink: e.target.value })} />
         <div className="flex justify-end gap-2">
           <Button type="button" variant="secondary" onClick={onClose}>취소</Button>
           <Button type="submit" disabled={isPending}>등록</Button>

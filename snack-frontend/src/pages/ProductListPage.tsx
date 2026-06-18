@@ -6,33 +6,44 @@ import Dropdown from '../components/common/Dropdown';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import { useProducts } from '../hooks/useProducts';
 import { useProductFilter } from '../hooks/useProductFilter';
-import { CATEGORIES } from '../constants/categories';
+import { useCategories } from '../hooks/useCategories';
 
 const SORT_OPTIONS = [
-  { value: 'latest', label: '최신순' },
-  { value: 'price_asc', label: '가격 낮은순' },
-  { value: 'price_desc', label: '가격 높은순' },
-  { value: 'popular', label: '인기순' },
+  { value: '최신순', label: '최신순' },
+  { value: '낮은가격순', label: '가격 낮은순' },
+  { value: '높은가격순', label: '가격 높은순' },
+  { value: '판매순', label: '인기순' },
 ];
 
 export default function ProductListPage() {
-  const { category, setCategory, sort, setSort } = useProductFilter();
-  const { data: products, isLoading } = useProducts({ category: category === 'all' ? undefined : category, sort });
+  const { categoryId, setCategoryId, sort, setSort } = useProductFilter();
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useProducts({ categoryId, sort });
+  const { data: categoryTree = [] } = useCategories();
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+
+  const products = data?.pages.flatMap((page) => page.products) ?? [];
 
   return (
     <div>
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
         <div className="flex flex-wrap gap-2">
-          {CATEGORIES.map((c) => (
+          <button
+            onClick={() => setCategoryId(undefined)}
+            className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${
+              categoryId === undefined ? 'bg-orange-500 text-white' : 'bg-white text-gray-600 hover:bg-gray-100'
+            }`}
+          >
+            전체
+          </button>
+          {categoryTree.map((parent) => (
             <button
-              key={c.value}
-              onClick={() => setCategory(c.value)}
+              key={parent.id}
+              onClick={() => setCategoryId(parent.id)}
               className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${
-                category === c.value ? 'bg-orange-500 text-white' : 'bg-white text-gray-600 hover:bg-gray-100'
+                categoryId === parent.id ? 'bg-orange-500 text-white' : 'bg-white text-gray-600 hover:bg-gray-100'
               }`}
             >
-              {c.label}
+              {parent.name}
             </button>
           ))}
         </div>
@@ -45,11 +56,21 @@ export default function ProductListPage() {
       {isLoading ? (
         <div className="py-20"><LoadingSpinner size="lg" /></div>
       ) : (
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-          {products?.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        <>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+            {products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+
+          {hasNextPage && (
+            <div className="mt-8 flex justify-center">
+              <Button variant="secondary" onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
+                {isFetchingNextPage ? '불러오는 중...' : '더보기'}
+              </Button>
+            </div>
+          )}
+        </>
       )}
 
       <ProductRegisterModal isOpen={isRegisterOpen} onClose={() => setIsRegisterOpen(false)} />

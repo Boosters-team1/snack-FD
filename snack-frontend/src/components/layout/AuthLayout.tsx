@@ -1,18 +1,13 @@
-import { Navigate, Outlet } from 'react-router-dom';
-import Header from './Header';
-import { useAuth } from '../../hooks/useAuth';
+import { Outlet } from "react-router-dom";
+import Header from "./Header";
 
 export default function AuthLayout() {
-  const { isLoggedIn } = useAuth();
-
-  if (!isLoggedIn) return <Navigate to="/login" replace />;
+  // if (!isLoggedIn) return <Navigate to="/login" replace />;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FBF8F4]">
       <Header />
-      <main className="mx-auto max-w-6xl px-4 py-8">
-        <Outlet />
-      </main>
+      <Outlet />
     </div>
   );
 }

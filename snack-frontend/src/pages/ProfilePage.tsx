@@ -75,6 +75,7 @@ export default function ProfilePage() {
             readOnly
           />
         </div>
+
         <div className="mb-5">
           <label className="mb-2 block text-[13px] font-semibold text-[#1A1A1A]">
             비밀번호

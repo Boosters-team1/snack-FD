@@ -1,11 +1,16 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getProducts, getProduct, createProduct, updateProduct, deleteProduct } from '../api/products';
-import type { ProductCreateRequest, ProductUpdateRequest } from '../types/product';
+import type { ProductModalCreateRequest, ProductModalUpdateRequest } from '../types/product';
 
-export function useProducts(params?: { category?: string; sort?: string }) {
-  return useQuery({
+export function useProducts(params?: { categoryId?: number; sort?: string }) {
+  return useInfiniteQuery({
     queryKey: ['products', params],
-    queryFn: () => getProducts(params),
+    queryFn: ({ pageParam }) => getProducts({ ...params, page: pageParam as number }),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => {
+      const totalPages = Math.ceil(lastPage.total / 8);
+      return lastPage.page < totalPages ? lastPage.page + 1 : undefined;
+    },
   });
 }
 
@@ -20,7 +25,7 @@ export function useProduct(id: number) {
 export function useCreateProduct() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: ProductCreateRequest) => createProduct(data),
+    mutationFn: (data: ProductModalCreateRequest) => createProduct(data),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['products'] }),
   });
 }
@@ -28,7 +33,7 @@ export function useCreateProduct() {
 export function useUpdateProduct(id: number) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: ProductUpdateRequest) => updateProduct(id, data),
+    mutationFn: (data: ProductModalUpdateRequest) => updateProduct(id, data),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['products'] }),
   });
 }

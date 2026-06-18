@@ -24,7 +24,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         )}
         <div className="flex items-start justify-between gap-2">
           <div>
-            <p className="text-xs text-gray-400">{product.category}</p>
+            <p className="text-xs text-gray-400">{product.category?.name}</p>
             <h3 className="font-semibold text-gray-900">{product.name}</h3>
             <p className="mt-1 text-sm font-bold text-orange-500">{formatPrice(product.price)}</p>
           </div>

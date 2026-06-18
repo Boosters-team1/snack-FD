@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import Modal from '../common/Modal';
 import Input from '../common/Input';
 import Button from '../common/Button';
-import { CATEGORIES } from '../../constants/categories';
 import { useUpdateProduct } from '../../hooks/useProducts';
+import { useCategories, flattenCategories } from '../../hooks/useCategories';
 import type { Product } from '../../types/product';
 
 interface ProductEditModalProps {
@@ -13,16 +13,18 @@ interface ProductEditModalProps {
 }
 
 export default function ProductEditModal({ isOpen, onClose, product }: ProductEditModalProps) {
-  const [form, setForm] = useState({ name: product.name, price: String(product.price), category: product.category, description: product.description, imageUrl: product.imageUrl ?? '' });
+  const [form, setForm] = useState({ name: product.name, price: String(product.price), categoryId: product.categoryId, productLink: product.externalUrl ?? '', image: undefined as File | undefined });
   const { mutate, isPending } = useUpdateProduct(product.id);
+  const { data: categoryTree = [] } = useCategories();
+  const flatCategories = flattenCategories(categoryTree);
 
   useEffect(() => {
-    setForm({ name: product.name, price: String(product.price), category: product.category, description: product.description, imageUrl: product.imageUrl ?? '' });
+    setForm({ name: product.name, price: String(product.price), categoryId: product.categoryId, productLink: product.externalUrl ?? '', image: undefined });
   }, [product]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    mutate({ ...form, price: Number(form.price) }, { onSuccess: onClose });
+    mutate({ name: form.name, price: Number(form.price), categoryId: form.categoryId, productLink: form.productLink || undefined, image: form.image }, { onSuccess: onClose });
   };
 
   return (
@@ -33,17 +35,26 @@ export default function ProductEditModal({ isOpen, onClose, product }: ProductEd
         <div className="flex flex-col gap-1">
           <label className="text-sm font-medium text-gray-700">카테고리</label>
           <select
-            value={form.category}
-            onChange={(e) => setForm({ ...form, category: e.target.value })}
+            value={form.categoryId}
+            onChange={(e) => setForm({ ...form, categoryId: Number(e.target.value) })}
             className="rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-orange-400"
           >
-            {CATEGORIES.filter((c) => c.value !== 'all').map((c) => (
-              <option key={c.value} value={c.value}>{c.label}</option>
+            {flatCategories.map((c) => (
+              <option key={c.id} value={c.id}>{c.depth > 0 ? `ㄴ ${c.label}` : c.label}</option>
             ))}
           </select>
         </div>
-        <Input label="설명" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
-        <Input label="이미지 URL" value={form.imageUrl} onChange={(e) => setForm({ ...form, imageUrl: e.target.value })} />
+        <div className="flex flex-col gap-1">
+          <label className="text-sm font-medium text-gray-700">이미지 교체 (선택)</label>
+          {product.imageUrl && <p className="text-xs text-gray-400">현재 이미지가 있습니다. 새 파일을 선택하면 교체됩니다.</p>}
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setForm({ ...form, image: e.target.files?.[0] })}
+            className="rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-orange-400"
+          />
+        </div>
+        <Input label="상품 링크 (선택)" value={form.productLink} onChange={(e) => setForm({ ...form, productLink: e.target.value })} />
         <div className="flex justify-end gap-2">
           <Button type="button" variant="secondary" onClick={onClose}>취소</Button>
           <Button type="submit" disabled={isPending}>저장</Button>

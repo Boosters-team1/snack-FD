@@ -80,8 +80,19 @@ export const MAIN_CATEGORIES: MainCategory[] = [
 
 // ProductRegisterModal 호환용 — 전체 서브카테고리 목록
 export const CATEGORIES = [
+<<<<<<< HEAD
   { value: 'all', label: '전체' },
   ...MAIN_CATEGORIES.flatMap((cat) => cat.sub),
 ];
+=======
+  { id: 1, label: '스낵' },
+  { id: 2, label: '음료' },
+  { id: 3, label: '생수' },
+  { id: 4, label: '간편식' },
+  { id: 5, label: '신선식품' },
+  { id: 6, label: '원두커피' },
+  { id: 7, label: '비품' },
+] as const;
+>>>>>>> 3dd2d64f238eebe21bbda13ccaa61aa756ce8216
 
-export type CategoryValue = (typeof CATEGORIES)[number]['value'];
+export type CategoryId = (typeof CATEGORIES)[number]['id'];

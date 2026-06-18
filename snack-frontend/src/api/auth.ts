@@ -12,11 +12,16 @@ export const signup = async (data: SignupRequest): Promise<AuthResponse> => {
 };
 
 export const getProfile = async (): Promise<User> => {
-  const res = await axiosInstance.get<User>('/auth/me');
+  const res = await axiosInstance.get<User>('/users/me');
   return res.data;
 };
 
 export const updateProfile = async (data: ProfileUpdateRequest): Promise<User> => {
-  const res = await axiosInstance.patch<User>('/auth/me', data);
+  const res = await axiosInstance.patch<User>('/users/me', data);
+  return res.data;
+};
+
+export const updatePassword = async (data: { password: string; passwordConfirm: string }): Promise<{ message: string }> => {
+  const res = await axiosInstance.patch<{ message: string }>('/users/me/password', data);
   return res.data;
 };

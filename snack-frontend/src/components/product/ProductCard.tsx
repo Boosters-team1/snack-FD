@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom';
-import type { Product } from '../../types/product';
+import { Link } from "react-router-dom";
+import type { Product } from "../../types/product";
 
 interface ProductCardProps {
   product: Product;
@@ -28,7 +28,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         {/* 카테고리 + 구매 횟수 배지 */}
         <div className="flex items-center justify-between">
           <p className="text-base font-normal leading-[26px] text-[#999999]">
-            {product.category}
+            {product.category?.name}
           </p>
           <div className="inline-flex items-center bg-[#FEE8B0] px-2 py-1">
             <span className="text-base font-semibold leading-[26px] text-[#F97B22]">

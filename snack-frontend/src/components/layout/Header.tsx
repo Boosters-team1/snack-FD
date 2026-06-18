@@ -1,9 +1,9 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import Button from '../common/Button';
+import snackLogo from '../../assets/text.png';
 
 export default function Header() {
-  const { isLoggedIn, user, logout } = useAuth();
+  const { isLoggedIn, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -11,34 +11,26 @@ export default function Header() {
     navigate('/');
   };
 
-  return (
-    <header className="sticky top-0 z-40 border-b border-gray-100 bg-white shadow-sm">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-        <Link to={isLoggedIn ? '/products' : '/'} className="text-xl font-bold text-orange-500">
-          🍿 Snack
-        </Link>
+  const navLinkClass = 'text-[20px] font-bold leading-8 text-[#C4C4C4] hover:text-gray-500 transition-colors';
 
-        <nav className="flex items-center gap-3">
-          {isLoggedIn ? (
-            <>
-              <span className="text-sm text-gray-600">{user?.username}</span>
-              <Link to="/profile">
-                <Button variant="secondary" size="sm">프로필</Button>
-              </Link>
-              <Button variant="secondary" size="sm" onClick={handleLogout}>
-                로그아웃
-              </Button>
-            </>
-          ) : (
-            <>
-              <Link to="/login">
-                <Button variant="secondary" size="sm">로그인</Button>
-              </Link>
-              <Link to="/signup">
-                <Button size="sm">회원가입</Button>
-              </Link>
-            </>
-          )}
+  return (
+    <header className="sticky top-0 z-40 border-b border-[#E6E6E6] bg-[#FBF8F4]">
+      <div className="flex h-[88px] items-center justify-between px-[120px]">
+        {/* 왼쪽: 로고 + 상품 리스트 */}
+        <div className="flex items-center gap-16">
+          <Link to={isLoggedIn ? '/products' : '/'}>
+            <img src={snackLogo} alt="Snack" className="h-8 w-[126px]" />
+          </Link>
+          <Link to="/products" className="text-[20px] font-bold leading-8 text-[#F97B22]">
+            상품 리스트
+          </Link>
+        </div>
+
+        {/* 오른쪽: Cart · Profile · Logout */}
+        <nav className="flex items-center gap-12">
+          <Link to="/cart" className={navLinkClass}>Cart</Link>
+          <Link to="/profile" className={navLinkClass}>Profile</Link>
+          <button onClick={handleLogout} className={navLinkClass}>Logout</button>
         </nav>
       </div>
     </header>

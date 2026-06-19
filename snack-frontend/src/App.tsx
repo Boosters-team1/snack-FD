@@ -1,7 +1,6 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import GuestLayout from './components/layout/GuestLayout';
 import AuthLayout from './components/layout/AuthLayout';
-import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import ProductListPage from './pages/ProductListPage';
@@ -12,7 +11,11 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
+<<<<<<< HEAD
+        <Route path="/" element={<Navigate to="/products" replace />} />
+=======
         <Route path="/" element={<LandingPage />} />
+>>>>>>> 4c988d69cbd0ee3adb9cd6969d78956e129e4fc1
         <Route element={<GuestLayout />}>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />

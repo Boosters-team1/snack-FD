@@ -7,7 +7,6 @@ import ProductRegisterModal from "../components/product/ProductRegisterModal";
 import Dropdown from "../components/common/Dropdown";
 import type { SortOption } from "../types/product";
 
-// BE 가 한글 정렬 값을 그대로 받음 (SortOption 과 동일)
 const SORT_OPTIONS = [
   { value: "최신순", label: "최신순" },
   { value: "판매순", label: "판매순" },
@@ -22,7 +21,6 @@ export default function ProductListPage() {
   const [subId, setSubId] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // 카테고리 트리가 로드되기 전엔 첫 카테고리를 기본 선택으로 사용
   const activeMain = categoryTree.find((c) => c.id === mainId) ?? categoryTree[0];
   const categoryId = subId ?? activeMain?.id;
 

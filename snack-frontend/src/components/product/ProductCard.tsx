@@ -1,7 +1,5 @@
-import { Link } from 'react-router-dom';
-import type { Product } from '../../types/product';
-import { formatPrice } from '../../utils/formatPrice';
-import Badge from '../common/Badge';
+import { Link } from "react-router-dom";
+import type { Product } from "../../types/product";
 
 interface ProductCardProps {
   product: Product;
@@ -10,26 +8,44 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   return (
     <Link to={`/products/${product.id}`} className="block">
-      <div className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm transition hover:shadow-md">
-        {product.imageUrl ? (
-          <img
-            src={product.imageUrl}
-            alt={product.name}
-            className="mb-3 h-40 w-full rounded-xl object-cover"
-          />
-        ) : (
-          <div className="mb-3 flex h-40 w-full items-center justify-center rounded-xl bg-gray-100 text-4xl">
-            🍿
-          </div>
-        )}
-        <div className="flex items-start justify-between gap-2">
-          <div>
-            <p className="text-xs text-gray-400">{product.category?.name}</p>
-            <h3 className="font-semibold text-gray-900">{product.name}</h3>
-            <p className="mt-1 text-sm font-bold text-orange-500">{formatPrice(product.price)}</p>
-          </div>
-          <Badge count={product.purchaseCount} />
+      {/* 이미지 컨테이너 */}
+      <div className="aspect-square overflow-hidden rounded-[20px] bg-white shadow-[4px_4px_20px_0px_rgba(250,247,243,0.25)]">
+        <div className="flex h-full w-full items-center justify-center px-[30%] py-[18%]">
+          {product.imageUrl ? (
+            <img
+              src={product.imageUrl}
+              alt={product.name}
+              className="h-full w-full object-contain"
+            />
+          ) : (
+            <div className="h-full w-full bg-gray-50" />
+          )}
         </div>
+      </div>
+
+      {/* 상품 정보 */}
+      <div className="mt-6">
+        {/* 카테고리 + 구매 횟수 배지 */}
+        <div className="flex items-center justify-between">
+          <p className="text-base font-normal leading-[26px] text-[#999999]">
+            {product.category?.name}
+          </p>
+          <div className="inline-flex items-center bg-[#FEE8B0] px-2 py-1">
+            <span className="text-base font-semibold leading-[26px] text-[#F97B22]">
+              {product.purchaseCount}회 구매
+            </span>
+          </div>
+        </div>
+
+        {/* 상품명 */}
+        <h3 className="mt-2 text-xl font-semibold leading-8 text-[#1F1F1F]">
+          {product.name}
+        </h3>
+
+        {/* 가격 */}
+        <p className="mt-4 text-[32px] font-bold leading-[42px] text-[#1F1F1F]">
+          {product.price.toLocaleString()}원
+        </p>
       </div>
     </Link>
   );

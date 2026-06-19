@@ -8,11 +8,9 @@ export default function AuthLayout() {
   if (!isLoggedIn) return <Navigate to="/login" replace />;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background-400">
       <Header />
-      <main className="mx-auto max-w-6xl px-4 py-8">
-        <Outlet />
-      </main>
+      <Outlet />
     </div>
   );
 }

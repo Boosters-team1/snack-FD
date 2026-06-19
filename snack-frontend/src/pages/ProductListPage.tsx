@@ -4,7 +4,7 @@ import { useProductFilter } from "../hooks/useProductFilter";
 import ProductCard from "../components/product/ProductCard";
 import ProductRegisterModal from "../components/product/ProductRegisterModal";
 import Dropdown from "../components/common/Dropdown";
-import { MAIN_CATEGORIES } from "../constants/categories";
+import { MAIN_CATEGORIES, CATEGORIES } from "../constants/categories";
 import type { SortOption } from "../types/product";
 import cokeZero from "../assets/images/cokezero.png";
 import coke from "../assets/images/coke.png";
@@ -28,25 +28,147 @@ export default function ProductListPage() {
   const [page, setPage] = useState(1);
 
   const activeMain = MAIN_CATEGORIES.find((c) => c.value === mainCategory)!;
+  const mainCategoryIndex = MAIN_CATEGORIES.findIndex((c) => c.value === mainCategory);
+  const categoryId = mainCategoryIndex >= 0 ? CATEGORIES[mainCategoryIndex].id : undefined;
 
   const { data: apiData, isLoading } = useProducts({
-    category: subCategory || mainCategory,
+    categoryId,
     sort,
   });
 
   const MOCK_PRODUCTS = [
-    { id: 1, name: '코카콜라 제로', price: 2000, category: '청량·탄산음료', description: '', purchaseCount: 29, imageUrl: cokeZero, createdAt: '', updatedAt: '' },
-    { id: 2, name: '코카콜라', price: 2000, category: '청량·탄산음료', description: '', purchaseCount: 29, imageUrl: coke, createdAt: '', updatedAt: '' },
-    { id: 3, name: '환타 오렌지', price: 2000, category: '청량·탄산음료', description: '', purchaseCount: 29, imageUrl: fanta, createdAt: '', updatedAt: '' },
-    { id: 4, name: '스프라이트', price: 2000, category: '청량·탄산음료', description: '', purchaseCount: 29, imageUrl: sprite, createdAt: '', updatedAt: '' },
-    { id: 5, name: '코카콜라 제로', price: 2000, category: '청량·탄산음료', description: '', purchaseCount: 29, imageUrl: cokeZero, createdAt: '', updatedAt: '' },
-    { id: 6, name: '코카콜라', price: 2000, category: '청량·탄산음료', description: '', purchaseCount: 29, imageUrl: coke, createdAt: '', updatedAt: '' },
-    { id: 7, name: '환타 오렌지', price: 2000, category: '청량·탄산음료', description: '', purchaseCount: 29, imageUrl: fanta, createdAt: '', updatedAt: '' },
-    { id: 8, name: '스프라이트', price: 2000, category: '청량·탄산음료', description: '', purchaseCount: 29, imageUrl: sprite, createdAt: '', updatedAt: '' },
-    { id: 9, name: '코카콜라 제로', price: 2000, category: '청량·탄산음료', description: '', purchaseCount: 15, imageUrl: cokeZero, createdAt: '', updatedAt: '' },
-    { id: 10, name: '코카콜라', price: 2000, category: '청량·탄산음료', description: '', purchaseCount: 22, imageUrl: coke, createdAt: '', updatedAt: '' },
-    { id: 11, name: '환타 오렌지', price: 2000, category: '청량·탄산음료', description: '', purchaseCount: 18, imageUrl: fanta, createdAt: '', updatedAt: '' },
-    { id: 12, name: '스프라이트', price: 2000, category: '청량·탄산음료', description: '', purchaseCount: 11, imageUrl: sprite, createdAt: '', updatedAt: '' },
+    {
+      id: 1,
+      name: "코카콜라 제로",
+      price: 2000,
+      category: "청량·탄산음료",
+      description: "",
+      purchaseCount: 29,
+      imageUrl: cokeZero,
+      createdAt: "",
+      updatedAt: "",
+    },
+    {
+      id: 2,
+      name: "코카콜라",
+      price: 2000,
+      category: "청량·탄산음료",
+      description: "",
+      purchaseCount: 29,
+      imageUrl: coke,
+      createdAt: "",
+      updatedAt: "",
+    },
+    {
+      id: 3,
+      name: "환타 오렌지",
+      price: 2000,
+      category: "청량·탄산음료",
+      description: "",
+      purchaseCount: 29,
+      imageUrl: fanta,
+      createdAt: "",
+      updatedAt: "",
+    },
+    {
+      id: 4,
+      name: "스프라이트",
+      price: 2000,
+      category: "청량·탄산음료",
+      description: "",
+      purchaseCount: 29,
+      imageUrl: sprite,
+      createdAt: "",
+      updatedAt: "",
+    },
+    {
+      id: 5,
+      name: "코카콜라 제로",
+      price: 2000,
+      category: "청량·탄산음료",
+      description: "",
+      purchaseCount: 29,
+      imageUrl: cokeZero,
+      createdAt: "",
+      updatedAt: "",
+    },
+    {
+      id: 6,
+      name: "코카콜라",
+      price: 2000,
+      category: "청량·탄산음료",
+      description: "",
+      purchaseCount: 29,
+      imageUrl: coke,
+      createdAt: "",
+      updatedAt: "",
+    },
+    {
+      id: 7,
+      name: "환타 오렌지",
+      price: 2000,
+      category: "청량·탄산음료",
+      description: "",
+      purchaseCount: 29,
+      imageUrl: fanta,
+      createdAt: "",
+      updatedAt: "",
+    },
+    {
+      id: 8,
+      name: "스프라이트",
+      price: 2000,
+      category: "청량·탄산음료",
+      description: "",
+      purchaseCount: 29,
+      imageUrl: sprite,
+      createdAt: "",
+      updatedAt: "",
+    },
+    {
+      id: 9,
+      name: "코카콜라 제로",
+      price: 2000,
+      category: "청량·탄산음료",
+      description: "",
+      purchaseCount: 15,
+      imageUrl: cokeZero,
+      createdAt: "",
+      updatedAt: "",
+    },
+    {
+      id: 10,
+      name: "코카콜라",
+      price: 2000,
+      category: "청량·탄산음료",
+      description: "",
+      purchaseCount: 22,
+      imageUrl: coke,
+      createdAt: "",
+      updatedAt: "",
+    },
+    {
+      id: 11,
+      name: "환타 오렌지",
+      price: 2000,
+      category: "청량·탄산음료",
+      description: "",
+      purchaseCount: 18,
+      imageUrl: fanta,
+      createdAt: "",
+      updatedAt: "",
+    },
+    {
+      id: 12,
+      name: "스프라이트",
+      price: 2000,
+      category: "청량·탄산음료",
+      description: "",
+      purchaseCount: 11,
+      imageUrl: sprite,
+      createdAt: "",
+      updatedAt: "",
+    },
   ];
 
   const fetchedProducts = Array.isArray(apiData) ? apiData : [];
@@ -142,7 +264,13 @@ export default function ProductListPage() {
             >
               더보기
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M3 6L8 11L13 6" stroke="#F97B22" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path
+                  d="M3 6L8 11L13 6"
+                  stroke="#F97B22"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             </button>
           </div>

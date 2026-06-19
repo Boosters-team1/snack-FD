@@ -1,1 +1,37 @@
 @import "tailwindcss";
+
+/*
+ * Tailwind v4를 이용한 색상 변수명입니다. 아래 @theme 을 참고해주세요.
+ * --color-{name}-{shade} 형태로 정의하면 bg-/text-/border- 유틸이 생성~
+ */
+@theme {
+  --color-background-400: #fbf8f4;
+  --color-background-500: #fdf0df;
+
+  --color-black-200: #525252;
+  --color-black-400: #1f1f1f;
+
+  --color-gray-50: #ffffff;
+  --color-gray-200: #e0e0e0;
+  --color-gray-300: #c4c4c4;
+  --color-gray-400: #ababab;
+  --color-gray-500: #999999;
+
+  --color-line-200: #e6e6e6;
+
+  --color-primary-100: #fef3eb;
+  --color-primary-200: #fde1cd;
+  --color-primary-300: #fcc49c;
+  --color-primary-400: #f97b22;
+
+  --color-secondary-illustration01: #ffbde8;
+  --color-secondary-illustration06: #64d396;
+
+  --font-sans: "Pretendard", sans-serif;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-background-500);
+  }
+}

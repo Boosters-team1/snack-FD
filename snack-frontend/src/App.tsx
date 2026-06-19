@@ -11,7 +11,11 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
+<<<<<<< HEAD
         <Route path="/" element={<Navigate to="/products" replace />} />
+=======
+        <Route path="/" element={<LandingPage />} />
+>>>>>>> 4c988d69cbd0ee3adb9cd6969d78956e129e4fc1
         <Route element={<GuestLayout />}>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />

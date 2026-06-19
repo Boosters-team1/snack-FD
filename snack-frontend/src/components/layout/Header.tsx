@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
+import logoImg from "../../assets/images/logo.png";
 
 export default function Header() {
   const { isLoggedIn, logout } = useAuth();
@@ -15,16 +16,8 @@ export default function Header() {
       <div className="flex h-[88px] items-center justify-between px-[120px]">
         {/* 왼쪽: 로고 + 상품 리스트 */}
         <div className="flex items-center gap-16">
-          <Link
-            to="/products"
-            className="leading-none text-[#F97B22]"
-            style={{
-              fontFamily: "'Fredoka', sans-serif",
-              fontSize: "40px",
-              fontWeight: 700,
-            }}
-          >
-            Snack
+          <Link to="/products" className="leading-none">
+            <img src={logoImg} alt="Snack" width={126} height={32} />
           </Link>
           <Link to="/products" className="text-[16px] font-bold text-[#F97B22]">
             상품 리스트

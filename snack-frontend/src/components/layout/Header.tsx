@@ -21,7 +21,7 @@ export default function Header() {
         <nav className="flex items-center gap-3">
           {isLoggedIn ? (
             <>
-              <span className="text-sm text-gray-600">{user?.username}</span>
+              <span className="text-sm text-gray-600">{user?.name}</span>
               <Link to="/profile">
                 <Button variant="secondary" size="sm">프로필</Button>
               </Link>

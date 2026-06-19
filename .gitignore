@@ -1,0 +1,5 @@
+# Playwright MCP 산출물 (사용 안 함 — 브라우저 디버깅은 browser-harness 사용)
+.playwright-mcp/
+
+# OS
+.DS_Store

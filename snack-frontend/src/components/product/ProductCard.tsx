@@ -1,19 +1,23 @@
 import { Link } from "react-router-dom";
 import type { Product } from "../../types/product";
+import { productImages } from "../../assets/productImages";
 
 interface ProductCardProps {
   product: Product;
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
+  // 로컬 매핑이 있으면 우선, 없으면 서버 imageUrl 사용
+  const imageSrc = productImages[product.id] ?? product.imageUrl;
+
   return (
     <Link to={`/products/${product.id}`} className="block">
       {/* 이미지 컨테이너 */}
       <div className="aspect-square overflow-hidden rounded-[20px] bg-white shadow-[4px_4px_20px_0px_rgba(250,247,243,0.25)]">
         <div className="flex h-full w-full items-center justify-center px-[30%] py-[18%]">
-          {product.imageUrl ? (
+          {imageSrc ? (
             <img
-              src={product.imageUrl}
+              src={imageSrc}
               alt={product.name}
               className="h-full w-full object-contain"
             />

@@ -3,7 +3,7 @@ import { useProducts } from "../hooks/useProducts";
 import { useProductFilter } from "../hooks/useProductFilter";
 import { useCategories } from "../hooks/useCategories";
 import ProductCard from "../components/product/ProductCard";
-import ProductRegisterModal from "../components/product/ProductRegisterModal";
+import ProductCreateModal from "../components/ProductCreateModal";
 import Dropdown from "../components/common/Dropdown";
 import type { SortOption } from "../types/product";
 
@@ -22,10 +22,21 @@ export default function ProductListPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const activeMain = categoryTree.find((c) => c.id === mainId) ?? categoryTree[0];
-  const categoryId = subId ?? activeMain?.id;
+
+  // 조회할 카테고리 id 목록
+  // - 자식(서브) 선택: 해당 자식만
+  // - 부모 선택(자식 있음): 자식 카테고리 전체를 합쳐서 조회
+  // - 부모 선택(자식 없음): 부모 자신
+  const categoryIds = subId
+    ? [subId]
+    : activeMain
+      ? activeMain.children.length > 0
+        ? activeMain.children.map((c) => c.id)
+        : [activeMain.id]
+      : [];
 
   const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } =
-    useProducts({ categoryId, sort });
+    useProducts({ categoryIds, sort });
 
   const products = data?.pages.flatMap((p) => p.products) ?? [];
 
@@ -132,9 +143,10 @@ export default function ProductListPage() {
         + 상품 등록
       </button>
 
-      <ProductRegisterModal
+      <ProductCreateModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+        onSuccess={() => setIsModalOpen(false)}
       />
     </div>
   );

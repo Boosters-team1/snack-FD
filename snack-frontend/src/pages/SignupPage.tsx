@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { signup } from '../api/auth';
+import { signup, getProfile } from '../api/auth';
 import { useAuthStore } from '../stores/authStore';
 import { EyeIcon, FIELD_CLASS } from '../components/common/authField';
 
@@ -9,7 +9,7 @@ export default function SignupPage() {
   const [show, setShow] = useState({ password: false, passwordConfirm: false });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { setAuth } = useAuthStore();
+  const { setToken, setAuth } = useAuthStore();
   const navigate = useNavigate();
 
   const isValid =
@@ -28,8 +28,10 @@ export default function SignupPage() {
     setLoading(true);
     setError('');
     try {
-      const user = await signup(form);
-      setAuth(user);
+      const res = await signup(form);
+      setToken(res.accessToken);
+      const user = await getProfile();
+      setAuth(user, res.accessToken);
       navigate('/products');
     } catch {
       setError('회원가입에 실패했습니다. 다시 시도해 주세요.');

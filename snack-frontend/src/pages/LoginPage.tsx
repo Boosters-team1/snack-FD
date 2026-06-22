@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { login } from '../api/auth';
+import { login, getProfile } from '../api/auth';
 import { useAuthStore } from '../stores/authStore';
 import { EyeIcon, FIELD_CLASS } from '../components/common/authField';
 
@@ -9,7 +9,7 @@ export default function LoginPage() {
   const [showPw, setShowPw] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { setAuth } = useAuthStore();
+  const { setToken, setAuth } = useAuthStore();
   const navigate = useNavigate();
 
   const isValid = form.email.trim() !== '' && form.password !== '';
@@ -23,8 +23,10 @@ export default function LoginPage() {
     setLoading(true);
     setError('');
     try {
-      const user = await login(form);
-      setAuth(user);
+      const res = await login(form);
+      setToken(res.accessToken);
+      const user = await getProfile();
+      setAuth(user, res.accessToken);
       navigate('/products');
     } catch {
       setError('이메일 또는 비밀번호가 올바르지 않습니다.');

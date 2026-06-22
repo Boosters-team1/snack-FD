@@ -23,6 +23,9 @@ export interface SignupRequest {
   passwordConfirm: string;
 }
 
-export interface AuthResponse {
-  accessToken: string;
+// 백엔드 공통 응답 포맷: { success, data, message? }
+export interface ApiResponse<T> {
+  success: boolean;
+  data: T;
+  message?: string;
 }
